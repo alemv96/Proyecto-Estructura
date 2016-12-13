@@ -124,9 +124,10 @@ void Modulo_2_Menu(){
 
 void Replace_Simulator_Menu(){
 
-  int type_Politic , quantity_Instruct;
+  int type_Politic , quantity_Instruct , set_Qtty;
   quantity_Instruct = get_Quantity_Sequence();
   int sequence_Instuct[quantity_Instruct];//solo tendra un maximo de 20 instrucciones a recibir.
+  set_Qtty = set_Quantity();
 
   //ciclo que pedira al usuario la secuencia de direcciones.
   for (int counter = 0 ; counter < quantity_Instruct ; counter ++){
@@ -136,6 +137,8 @@ void Replace_Simulator_Menu(){
       scanf("%d", &sequence);
       sequence_Instuct[counter] = sequence;
   }
+
+  
 
 
 

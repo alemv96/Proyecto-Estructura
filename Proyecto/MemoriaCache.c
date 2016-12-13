@@ -128,6 +128,14 @@ void Replace_Simulator_Menu(){
   quantity_Instruct = get_Quantity_Sequence();
   int sequence_Instuct[quantity_Instruct];//solo tendra un maximo de 20 instrucciones a recibir.
 
+  //ciclo que pedira al usuario la secuencia de direcciones.
+  for (int counter = 0 ; counter < quantity_Instruct ; counter ++){
+    int sequence;
+
+      printf("introduzca secuencia de direcciones\n");
+      scanf("%d", &sequence);
+      sequence_Instuct[counter] = sequence;
+  }
 
 
 

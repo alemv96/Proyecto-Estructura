@@ -21,12 +21,17 @@ void User_Menu(){  //funcion que le permite al usuario escoger opcion principal.
       printf("Aviso: Favor introducir un valor numerico.\n");
       printf("1) Modulo 1: Mapeo de memoria\n");
       printf("2) Modulo 2: Ubicacion de bloques\n");
+      printf("3) Modulo 3: Sustitucion de bloques\n");
       printf("4) Salir del programa\n");
       scanf("%d" , &option);
 
       if(option == 1) Mapping_Menu();
       if (option == 2) Modulo_2_Menu();
-      if (option == 3) Replace_Simulator_Menu();//solo usara mapeo asociativo por conjunto.
+      if (option == 3) {
+        Replace_Simulator_Menu();
+        /*printf("No se logro implementar este modulo\n");
+        system("pause");*/
+      }//solo usara mapeo asociativo por conjunto.
 
 
       if ((option < 1) || (option > 4)){
@@ -124,24 +129,23 @@ void Modulo_2_Menu(){
 
 void Replace_Simulator_Menu(){
 
-  int type_Politic , quantity_Instruct , set_Qtty;
-  quantity_Instruct = get_Quantity_Sequence();
-  int sequence_Instuct[quantity_Instruct];//solo tendra un maximo de 20 instrucciones a recibir.
-  set_Qtty = set_Quantity();
+  int type_Politic , quantity_Instruct , set_Qtty ,cache_Blocks;
+  quantity_Instruct = get_Quantity_Sequence();//cantidad de instrucciones a introducir dentro de la memoria.
+  char sequence_Instuct[quantity_Instruct];//solo tendra un maximo de 20 instrucciones a recibir.
+  set_Qtty = set_Quantity();//cantidad de conjuntos a usar.
+  type_Politic = replace_Politic();//tipo de politica de reemplazo que se quiere
+  cache_Blocks = cache_Size_Block();//cantidad de bloques en cache.
 
   //ciclo que pedira al usuario la secuencia de direcciones.
-  for (int counter = 0 ; counter < quantity_Instruct ; counter ++){
-    int sequence;
 
-      printf("introduzca secuencia de direcciones\n");
-      scanf("%d", &sequence);
-      sequence_Instuct[counter] = sequence;
-  }
+    char sequence;
+    for (int counter = 0 ; counter < quantity_Instruct ; counter ++){
+        printf("introduzca secuencia de direcciones\n");
+        scanf("%s", &sequence);
+        sequence_Instuct[counter] = sequence;
+    }
 
-  
-
-
-
+    //set_Matrix_Behavior(sequence_Instuct , quantity_Instruct , set_Qtty , type_Politic , cache_Blocks);//por ahora esos valores por parametros.
 }
 
 void main(){
@@ -149,3 +153,4 @@ void main(){
   User_Menu();
   system("pause");
 }
+//puedo recibir arreglos como parametros.

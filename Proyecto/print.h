@@ -96,6 +96,8 @@ void print_Set_Associative_Cache(int Tag , int Set , int offset){
   system("pause");
 }
 
-void print_Replace_Module(int size_Sets , int size_Cache_Memory){
-  int sets_Matrix[size_Sets][size_Cache_Memory/size_Sets];
+void print_Replace_Module(int value[]){
+
+
+
 }

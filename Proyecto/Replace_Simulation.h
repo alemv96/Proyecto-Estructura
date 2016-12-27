@@ -122,109 +122,92 @@ int get_Quantity_Sequence(){
 }
 
 void Random_Replacement(int cache_Blocks , int set_Qtty , char sequence_Instuct[] , int quantity_Instruct/*faltan parametros*/){
-  char cache_Matrix[cache_Blocks][set_Qtty];   int array_N = 0;
 
+  char cache_Matrix[cache_Blocks / set_Qtty][set_Qtty];   int array_N = 0;  int conflict_Misses = 0; int hits = 0; int compulsory_Misses = 0;
+  int capacity_Misses =0; int counter_Column = 0; int empty_Boxes = 1; int exit_Counter = 0; int counter_Auxiliar = 0; int counter_Row;
+  int verify_Matrix = 0;   srand (time(NULL));
+
+
+//revisar porque la matriz no agarra y es como si estuviera en null.
   //rellenare la matriz con "-"
     for (int rows = 0 ; rows < (cache_Blocks / set_Qtty) ; rows ++)
       for(int columns = 0 ; columns < set_Qtty ; columns ++)
-        cache_Matrix[cache_Blocks][columns] = '-';
+        cache_Matrix[rows][columns] = '-';
+
+        for(int row = 0 ; row < cache_Blocks / set_Qtty ; row ++){
+          for(int column = 0 ; column < set_Qtty ; column ++){
+            printf("[ %c ]", cache_Matrix[row][column]);
+          }
+          printf("\n");
+        }
+        system("pause");
+
+    /*printf(" %c ", cache_Matrix[0][0]);
+    system("pause");
+
+    printf("anadi los valores a la matriz - - - ");
+    system("pause");*/
 
     while (array_N < quantity_Instruct){
-      int conflict_Misses = 0; int hits = 0; int compulsory_Misses = 0;
-      int capacity_Misses =0; int counter_Row = (cache_Blocks / set_Qtty)*(sequence_Instuct[array_N] % set_Qtty);
-      int counter_Column = 0; int counter_Matrix = 0;
+    int counter = 0; int exit_Value = 0;
+    counter_Row = (cache_Blocks / set_Qtty)*(sequence_Instuct[array_N] % set_Qtty);
+    printf("entre al ciclo");
+    system("pause");
 
-      if (counter_Matrix = 0 ){//posiciona los valores cuando todas las casillas estan vacias
+      while(counter < cache_Blocks / set_Qtty && exit_Value == 0){
+         system("pause");
+          if (sequence_Instuct[array_N] == cache_Matrix[counter_Row][counter_Column]){
+            hits ++;
+            exit_Value = 1;
+          }
+          else counter_Column ++;
 
-        if (verify_Hits(sequence_Instuct[array_N] , cache_Matrix , cache_Blocks , counter_Row , set_Qtty) == 0){
-          counter_Row += get_Rows_Displace(cache_Matrix , counter_Row , cache_Blocks , set_Qtty);
-          counter_Column = get_Empty_Column(cache_Matrix , counter_Row , cache_Blocks , set_Qtty);
-          cache_Matrix[counter_Row][counter_Column] = sequence_Instuct[array_N];
-          counter_Matrix = verify_Space_Matrix(cache_Matrix , counter_Row , set_Qtty , cache_Blocks);
-          compulsory_Misses ++;
-        }else  hits ++;
-
-
-      }else{//posiciona todos los valores cuando las casillas estan llenas
-
+          if (counter_Column == set_Qtty){
+            counter_Row ++;
+            counter_Column = 0;
+          }
+          counter ++;
       }
 
-      array_N ++;
-    }
-}
+      if (exit_Value == 0){//quiere decir que no consiguio ningun valor que se repitiera, por lo tanto puede ser colocado.
+        counter_Row = (cache_Blocks / set_Qtty)*(sequence_Instuct[array_N] % set_Qtty);
+        counter_Column = 0;
+        counter = 0;
 
-int verify_Space_Matrix(char cache_Matrix[][] , int counter_Row , int set_Qtty , int cache_Blocks){
-  int counter_Column = 0; int booleano = 0; int exit_Counter = 0; int counter_Auxiliar = 0;
+        //para entrar en el ciclo pregunto si hay casillas disponibles.
+        if(verify_Matrix = 0){
+          while(counter < cache_Blocks / set_Qtty){
+            if (cache_Matrix[counter_Row][counter_Column] == '-'){
+                cache_Matrix[counter_Row][counter_Column] = sequence_Instuct[array_N];
+                compulsory_Misses ++;
+                break;
+              }
+              else counter_Column ++;
 
-    do {
-
-      if (cache_Matrix[counter_Row][counter_Column] == '-') exit_Counter = 1;
-      else{
-        counter_Auxiliar ++;
-        counter_Column ++;
-      }
-
-      if (counter_Auxiliar == set_Qtty / cache_Blocks) booleano = 1;
-      else{
-        if (counter_Column == set_Qtty){
-          counter_Column = 0;
-          counter_Row ++ ;
+              if (counter == cache_Blocks / set_Qtty) verify_Matrix = 1; // quiere decir que no hay casillas vacias, por lo tanto hay falla por capacidad.
+              else{
+                if (counter_Column == set_Qtty){
+                  counter_Column = 0;
+                  counter_Row ++;
+                }
+              }
+              counter ++;
+            }
+        }else{
+          counter_Row = (cache_Blocks / set_Qtty)*(sequence_Instuct[array_N] % set_Qtty);
+          capacity_Misses ++;
+          cache_Matrix[counter_Row +  rand()%(1)][rand()%(cache_Blocks/set_Qtty)] = sequence_Instuct[array_N];
         }
       }
-    } while(exit_Counter != 1 && counter_Auxiliar < set_Quantity / cache_Blocks);
+      array_N ++;
+     }
 
-    return booleano;
-}
-
-//verifica si el valor que voy a insertar ya se encuentra dentro de la matriz.
-int verify_Hits(char number_To_Compare , char cache_Matrix[][] ,int cache_Blocks, int counter_Row ,int set_Qtty){
-  int counter_Column = 0; int booleano = 0; int verify_Hit = 0; int exit_Counter = 0;
-
-    do {
-      if (cache_Matrix[counter_Row][counter_Column] == number_To_Compare){
-        verify_Hit = 1;
-        booleano = 1;
-      } else counter_Column ++;
-
-      if (counter_Column == set_Qtty){
-        counter_Column = 0;
-        counter_Row ++;
-      }
-
-      exit_Counter ++ ;
-  } while(cache_Matrix[counter_Row][counter_Column] != '-' || exit_Counter < cache_Blocks / set_Qtty || booleano == 0);
-  //creo que tengo condiciones de mas, revisar!.
-  return verify_Hit;
-}
-
-//me devuelve cuanto se desplaza una columna para colocar el valor que se indica. Solo funciona cuando se sabe que existen casillas vacias, de lo contrario sera ciclo infinito.
-int get_Rows_Displace(char cache_Matrix[][] , int counter_Row , int cache_Blocks , int set_Qtty){
-  int row_Displace = 0; int booleano = 0;
-
-    while (counter_Column < set_Qtty && booleano == 0){
-      if (cache_Matrix[counter_Row][counter_Column] == '-') booleano = 1;
-      else  counter_Column ++;
-
-      if (counter_Column == set_Qtty){
-        counter_Column = 0;
-        row_Displace ++;
-      }
-    }
-  return row_Displace;
-}
-
-int get_Empty_Column(char cache_Matrix[][] , int counter_Row , int cache_Blocks , int set_Qtty){
-  int counter_Column = 0; int booleano = 0;
-
-    while (counter_Column < set_Qtty && booleano == 0){
-
-      if (cache_Matrix[counter_Row][counter_Column] == '-') booleano = 1;
-      else  counter_Column ++;
-
-      if (counter_Column == set_Qtty && booleano == 0){
-        counter_Column = 0;
-        counter_Row ++;
-      }
-    }
-  return counter_Column;
+     //muestro la matriz
+     for(int row = 0 ; row < cache_Blocks / set_Qtty ; row ++){
+       for(int column = 0 ; column < set_Qtty ; column ++){
+         printf("[ %s ]", cache_Matrix[row][column]);
+       }
+       printf("\n");
+     }
+     system("pause");
 }

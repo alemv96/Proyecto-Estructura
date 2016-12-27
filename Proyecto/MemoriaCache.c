@@ -141,10 +141,12 @@ void Replace_Simulator_Menu(){
     char sequence;
     for (int counter = 0 ; counter < quantity_Instruct ; counter ++){
         printf("introduzca secuencia de direcciones\n");
-        scanf("%s", &sequence);
+        fflush(stdin);
+        scanf("%c", &sequence);
         sequence_Instuct[counter] = sequence;
     }
 
+    Random_Replacement(cache_Blocks ,set_Qtty , sequence_Instuct , quantity_Instruct);
     //set_Matrix_Behavior(sequence_Instuct , quantity_Instruct , set_Qtty , type_Politic , cache_Blocks);//por ahora esos valores por parametros.
 }
 
